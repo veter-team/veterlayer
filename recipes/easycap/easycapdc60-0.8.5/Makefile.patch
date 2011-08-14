@@ -1,0 +1,34 @@
+Index: src/Makefile
+===================================================================
+--- /dev/null
++++ src/Makefile
+@@ -0,0 +1,29 @@
++#
++#  default
++#  Makefile in source subdirectory
++#
++
++MODULES = easycap
++
++obj-m		+= easycap.o
++easycap-objs	:= easycap_main.o easycap_low.o easycap_sound.o
++easycap-objs	+= easycap_ioctl.o easycap_settings.o
++easycap-objs	+= easycap_testcard.o
++easycap-objs    += easycap_ioctlmessdefault.o
++
++BUILD = $(MODULES:%=%.ko)
++
++PWD = $(shell pwd)
++KBUILD_FLAGS = -C $(KERNEL_PATH) M=$(PWD) KERNELRELEASE=$(KERNELRELEASE)
++
++# default rule
++
++default: modules
++
++# modules: build the kernel modules using the Linux kernel makefiles
++modules:
++	 $(MAKE) $(KBUILD_FLAGS) modules
++
++clean::
++	@rm -rf *.o *~ core .depend .*.cmd *.ko *.mod.c .tmp_versions $(BUILD) Module.symvers
++

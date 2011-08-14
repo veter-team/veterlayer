@@ -1,0 +1,37 @@
+Index: linux-2.6.35.9/arch/arm/mach-omap2/board-omap3beagle.c
+===================================================================
+--- linux-2.6.35.9.orig/arch/arm/mach-omap2/board-omap3beagle.c	2011-06-19 18:08:22.934923075 +0200
++++ linux-2.6.35.9/arch/arm/mach-omap2/board-omap3beagle.c	2011-06-19 18:10:50.792815108 +0200
+@@ -636,6 +636,7 @@
+        },
+ };
+ 
++/*
+ #if defined(CONFIG_RTC_DRV_DS1307) || \
+ 	defined(CONFIG_RTC_DRV_DS1307_MODULE)
+ 
+@@ -647,11 +648,13 @@
+ #else
+ static struct i2c_board_info __initdata beagle_i2c2_boardinfo[] = {};
+ #endif
++*/
+ 
+ static int __init omap3_beagle_i2c_init(void)
+ {
+ 	omap_register_i2c_bus(1, 2600, beagle_i2c1_boardinfo,
+ 			ARRAY_SIZE(beagle_i2c1_boardinfo));
++	/*
+ 	if(!strcmp(expansionboard_name, "zippy2") || !strcmp(expansionboard_name, "zippy")) 
+ 	{
+ 	omap_register_i2c_bus(2, 400,  beagle_i2c2_boardinfo,
+@@ -659,8 +662,9 @@
+ 	}
+ 	else
+ 	{
+-	omap_register_i2c_bus(2, 400, NULL, 0);
++	omap_register_i2c_bus(2, 100, NULL, 0);
+ 	}
++	*/
+ 	/* Bus 3 is attached to the DVI port where devices like the pico DLP
+ 	 * projector don't work reliably with 400kHz */
+ 	omap_register_i2c_bus(3, 100, beagle_i2c_eeprom, ARRAY_SIZE(beagle_i2c_eeprom));

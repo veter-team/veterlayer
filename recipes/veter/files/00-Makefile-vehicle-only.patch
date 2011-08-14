@@ -1,0 +1,10 @@
+Index: veter/CMakeLists.txt
+===================================================================
+--- veter.orig/CMakeLists.txt	2010-08-17 16:18:28.000000000 +0200
++++ veter/CMakeLists.txt	2010-08-17 16:18:46.000000000 +0200
+@@ -22,4 +22,4 @@
+ 
+ 
+ add_subdirectory(src/vehicle)
+-add_subdirectory(src/cockpit)
++#add_subdirectory(src/cockpit)
