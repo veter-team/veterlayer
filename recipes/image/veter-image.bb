@@ -33,12 +33,12 @@ IMAGE_INSTALL += " gstreamer-ti "
 
 # Several usefull utilities
 IMAGE_INSTALL += " mtd-utils devmem2 i2c-tools wireless-tools wpa-supplicant opencv-apps avahi avahi-daemon avahi-dnsconfd "
-IMAGE_INSTALL += " gpsd gpsd-dev ntp xenomai "
+IMAGE_INSTALL += " gpsd ntp xenomai "
 
 # Development environment
 IMAGE_INSTALL += " task-sdk-native git cmake slice2cppe icee-slice libicee kernel-headers ldd gdb "
 IMAGE_INSTALL += " gstreamer-dev gst-plugins-base-dev libicee-dev libv4l-dev curl-dev xenomai-dev "
-# IMAGE_INSTALL += " libc6-dev boost-dev "
+IMAGE_INSTALL += " libgps "
 
 IMAGE_PREPROCESS_COMMAND += "install -d ${IMAGE_ROOTFS}/root/.ssh;"
 # IMAGE_PREPROCESS_COMMAND += "install -c -m 600 ${FILE_DIRNAME}/files/authorized_keys ${IMAGE_ROOTFS}/root/.ssh/authorized_keys;"
