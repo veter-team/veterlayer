@@ -1,0 +1,13 @@
+Index: git/include/configs/omap3_beagle.h
+===================================================================
+--- git.orig/include/configs/omap3_beagle.h	2011-08-29 13:16:00.465479354 +0200
++++ git/include/configs/omap3_beagle.h	2011-08-29 13:16:15.525004710 +0200
+@@ -195,7 +195,7 @@
+ 							/* partition */
+ 
+ /* Environment information */
+-#define CONFIG_BOOTDELAY		10
++#define CONFIG_BOOTDELAY		1
+ 
+ #define CONFIG_EXTRA_ENV_SETTINGS \
+ 	"loadaddr=0x82000000\0" \

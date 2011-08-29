@@ -33,7 +33,7 @@ IMAGE_INSTALL += " gstreamer-ti "
 
 # Several usefull utilities
 IMAGE_INSTALL += " mtd-utils devmem2 i2c-tools wireless-tools wpa-supplicant opencv-apps avahi avahi-daemon avahi-dnsconfd "
-IMAGE_INSTALL += " gpsd ntp xenomai "
+IMAGE_INSTALL += " gpsd gps-utils ntp xenomai "
 
 # Development environment
 IMAGE_INSTALL += " task-sdk-native git cmake slice2cppe icee-slice libicee kernel-headers ldd gdb "
