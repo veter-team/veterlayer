@@ -4,7 +4,7 @@ PRIORITY = "optional"
 LICENSE = "GPL"
 DEPENDS = "ncurses python libusb1"
 PROVIDES = "virtual/gpsd"
-INC_PR = "r11"
+INC_PR = "r12"
 
 EXTRA_OECONF = "--x-includes=${STAGING_INCDIR}/X11 \
                 --x-libraries=${STAGING_LIBDIR} \
@@ -72,7 +72,7 @@ FILES_gpsd-udev = "${base_libdir}/* ${sysconfdir}/udev/*"
 RDEPENDS_gpsd-udev += "udev gpsd-conf"
 
 DESCRIPTION_libgps = "C service library used for communicating with gpsd"
-FILES_libgps = "${libdir}/libgps*.so.* ${includedir}/*"
+FILES_libgps = "${libdir}/libgps*.so* ${includedir}/*"
 
 DESCRIPTION_gpsd-conf = "gpsd configuration files and init scripts" 
 FILES_gpsd-conf = "${sysconfdir}"
