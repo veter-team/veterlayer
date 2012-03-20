@@ -1,0 +1,15 @@
+Index: zeroc-ice/cpp/config/Make.rules.Linux
+===================================================================
+--- zeroc-ice.orig/cpp/config/Make.rules.Linux	2010-09-17 14:10:31.000000000 +0200
++++ zeroc-ice/cpp/config/Make.rules.Linux	2010-09-17 14:12:00.000000000 +0200
+@@ -149,8 +149,8 @@
+ LIBS			= $(BZIP2_RPATH_LINK) -lIce $(BASELIBS)
+ 
+ ifneq ($(QT_HOME),)
+-   QT_FLAGS             = -I$(QT_HOME)/include
+-   QT_LIBS              = -L$(QT_HOME)/$(libsubdir) -lQtCore -lQtSql
++   QT_FLAGS             = -I$(QT_HOME)
++   QT_LIBS              = -lQtCore -lQtSql
+    QT_RPATH_LINK        = $(call rpathlink,$(QT_HOME)/$(libsubdir))
+ endif
+ 

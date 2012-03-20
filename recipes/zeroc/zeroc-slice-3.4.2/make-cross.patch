@@ -1,0 +1,197 @@
+Index: Ice-3.4.2/cpp/config/Make.rules.Linux
+===================================================================
+--- Ice-3.4.2.orig/cpp/config/Make.rules.Linux	2012-03-16 12:29:55.281769864 +0100
++++ Ice-3.4.2/cpp/config/Make.rules.Linux	2012-03-16 12:29:56.346301818 +0100
+@@ -31,7 +31,9 @@
+    CXX			= c++
+ endif
+ 
+-ifeq ($(CXX),c++)
++ifeq ($(AR),)
++   AR			= ar
++endif
+ 
+     ifneq ($(SUSE_i586),)
+         CXXARCHFLAGS	+= -march=i586
+@@ -67,15 +69,7 @@
+       CXXARCHFLAGS	+= -mtune=v8 -pipe -Wno-deprecated -DICE_USE_MUTEX_SHARED
+    endif
+ 
+-   ifeq ($(MACHINE),x86_64)
+-      ifeq ($(LP64),yes)
+-         CXXARCHFLAGS	+= -m64
+-      else
+-         CXXARCHFLAGS	+= -m32
+-      endif
+-   endif
+-
+-   CXXFLAGS		= $(CXXARCHFLAGS) -Wall -D_REENTRANT -DHAVE_ENDIAN_H -DHAVE_LIMITS_H
++   CXXFLAGS		+= $(CXXARCHFLAGS) -Wall -D_REENTRANT -DHAVE_ENDIAN_H -DHAVE_LIMITS_H
+ 
+    ifneq ($(GENPIC),no)
+       CXXFLAGS		+= -fPIC
+@@ -90,11 +84,11 @@
+    #
+    # C++ run-time libraries, necessary for linking some shared libraries.
+    #
+-   CXXLIBS		=
++   CXXLIBS		+= ""
+ 
+    mkshlib		= $(CXX) -shared $(LDFLAGS) -o $(1) -Wl,-h,$(2) $(3) $(4) -lpthread -lrt
+ 
+-   mklib		= ar cr $(1) $(2)
++   mklib		= $(AR) cr $(1) $(2)
+ 
+    rpathlink            = -Wl,-rpath-link,$(1)
+ 
+@@ -106,8 +100,6 @@
+ 
+    LDPLATFORMFLAGS	+= -rdynamic
+ 
+-endif
+-
+ ifeq ($(CXX),icpc)
+    $(warning ===================================================================)
+    $(warning Intel C++ is currently not supported. The Ice team does not)
+@@ -130,11 +122,11 @@
+    #
+    # C++ run-time libraries, necessary for linking some shared libraries.
+    #
+-   CXXLIBS		=
++   CXXLIBS		+= ""
+ 
+    mkshlib		= $(CXX) -shared $(LDFLAGS) -o $(1) -Wl,-h,$(2) $(3) $(4) -lpthread -lrt
+ 
+-   mklib		= ar cr $(1) $(2)
++   mklib		= $(AR) cr $(1) $(2)
+ 
+    rpathlink            = -Wl,-rpath-link,$(1)
+ 
+Index: Ice-3.4.2/cpp/config/Make.rules
+===================================================================
+--- Ice-3.4.2.orig/cpp/config/Make.rules	2012-03-16 12:29:56.150203827 +0100
++++ Ice-3.4.2/cpp/config/Make.rules	2012-03-16 12:29:56.346301818 +0100
+@@ -221,14 +221,14 @@
+ SLICE2CPPFLAGS		= $(ICECPPFLAGS)
+ 
+ ifeq ($(ice_dir), /usr) 
+-    CPPFLAGS		= 
+-    LDFLAGS		= $(LDPLATFORMFLAGS) $(CXXFLAGS)
++    CPPFLAGS		+= ""
++    LDFLAGS		+= $(LDPLATFORMFLAGS) $(CXXFLAGS)
+ else
+-    CPPFLAGS	= -I$(includedir)
++    CPPFLAGS	+= -I$(includedir)
+     ifdef ice_src_dist
+-        LDFLAGS		= $(LDPLATFORMFLAGS) $(CXXFLAGS) -L$(libdir) 
++        LDFLAGS		+= $(LDPLATFORMFLAGS) $(CXXFLAGS) -L$(libdir) 
+     else
+-        LDFLAGS		= $(LDPLATFORMFLAGS) $(CXXFLAGS) -L$(ice_dir)/$(libsubdir) 
++        LDFLAGS		+= $(LDPLATFORMFLAGS) $(CXXFLAGS) -L$(ice_dir)/$(libsubdir) 
+     endif
+ endif
+ 
+@@ -250,12 +250,12 @@
+ 
+ ifdef ice_src_dist
+     SLICEPARSERLIB	= $(libdir)/$(call mklibfilename,Slice,$(VERSION))
+-    SLICE2CPP		= $(bindir)/slice2cpp
+-    SLICE2FREEZE	= $(bindir)/slice2freeze
++    SLICE2CPP		= slice2cpp
++    SLICE2FREEZE	= slice2freeze
+ else
+     SLICEPARSERLIB	= $(ice_dir)/$(libsubdir)/$(call mklibfilename,Slice,$(VERSION))
+-    SLICE2CPP		= $(ice_dir)/$(binsubdir)/slice2cpp
+-    SLICE2FREEZE	= $(ice_dir)/$(binsubdir)/slice2freeze
++    SLICE2CPP		= slice2cpp
++    SLICE2FREEZE	= slice2freeze
+ endif
+ 
+ EVERYTHING		= all depend clean install 
+Index: Ice-3.4.2/cpp/src/Makefile
+===================================================================
+--- Ice-3.4.2.orig/cpp/src/Makefile	2011-06-15 21:43:59.000000000 +0200
++++ Ice-3.4.2/cpp/src/Makefile	2012-03-16 12:29:56.350303818 +0100
+@@ -21,23 +21,7 @@
+ 		  slice2php \
+ 		  slice2py \
+ 		  slice2rb \
+-		  slice2html \
+-		  Ice \
+-		  IceXML \
+-		  IceSSL \
+-		  Freeze \
+-		  FreezeScript \
+-		  IceBox \
+-		  Glacier2Lib \
+-		  Glacier2 \
+-		  IceDB \
+-		  IcePatch2Lib \
+-		  IcePatch2 \
+-		  IceStormLib \
+-		  IceGridLib \
+-		  IceStorm \
+-		  IceGrid \
+-		  ca
++		  slice2html
+ 
+ $(EVERYTHING)::
+ 	@for subdir in $(SUBDIRS); \
+Index: Ice-3.4.2/cpp/Makefile
+===================================================================
+--- Ice-3.4.2.orig/cpp/Makefile	2012-03-16 12:29:53.949103921 +0100
++++ Ice-3.4.2/cpp/Makefile	2012-03-16 12:29:56.350303818 +0100
+@@ -11,9 +11,9 @@
+ 
+ include $(top_srcdir)/config/Make.rules
+ 
+-SUBDIRS		= config src include
++SUBDIRS		= src 
+ 
+-INSTALL_SUBDIRS	= $(install_bindir) $(install_libdir) $(install_includedir) $(install_configdir)
++INSTALL_SUBDIRS	= $(install_bindir) $(install_libdir) 
+ 
+ install:: install-common
+ 	@for subdir in $(INSTALL_SUBDIRS); \
+Index: Ice-3.4.2/Makefile
+===================================================================
+--- Ice-3.4.2.orig/Makefile	2011-06-15 21:43:58.000000000 +0200
++++ Ice-3.4.2/Makefile	2012-03-16 12:29:56.350303818 +0100
+@@ -7,10 +7,10 @@
+ #
+ # **********************************************************************
+ 
+-SUBDIRS			= cpp java cs py rb php
+-CLEAN_SUBDIRS		= java cs py rb php cpp
+-DEPEND_SUBDIRS		= cpp cs py rb php
+-INSTALL_SUBDIRS		= cpp java cs py rb php
++SUBDIRS			= cpp 
++CLEAN_SUBDIRS		= cpp
++DEPEND_SUBDIRS		= cpp 
++INSTALL_SUBDIRS		= cpp
+ 
+ all::
+ 	@for subdir in $(SUBDIRS); \
+Index: Ice-3.4.2/config/Make.common.rules
+===================================================================
+--- Ice-3.4.2.orig/config/Make.common.rules	2012-03-16 12:55:43.754337221 +0100
++++ Ice-3.4.2/config/Make.common.rules	2012-03-16 12:56:39.326106845 +0100
+@@ -65,13 +65,13 @@
+    endif
+ endif
+ 
+-ifeq ($(LP64),yes)
+-    libsubdir		  := lib$(lp64suffix)
+-    binsubdir		  := bin$(lp64binsuffix)
+-else
++#ifeq ($(LP64),yes)
++#    libsubdir		  := lib$(lp64suffix)
++#    binsubdir		  := bin$(lp64binsuffix)
++#else
+     libsubdir		  := lib
+     binsubdir		  := bin
+-endif
++#endif
+ 
+ #
+ # The following variables might also be defined:

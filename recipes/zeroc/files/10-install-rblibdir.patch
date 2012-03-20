@@ -1,0 +1,24 @@
+diff --git a/rb/config/Make.rules b/rb/config/Make.rules
+index 2de7226..e29e57d 100644
+diff -Nur -x '*.orig' -x '*~' zeroc-ice/rb/config/Make.rules zeroc-ice.new/rb/config/Make.rules
+--- zeroc-ice/rb/config/Make.rules	2008-07-01 17:31:25.000000000 +0200
++++ zeroc-ice.new/rb/config/Make.rules	2008-08-07 09:58:25.945848999 +0200
+@@ -18,7 +18,7 @@
+ # The "root directory" for runpath embedded in executables. Can be unset
+ # to avoid adding a runpath to Ice executables.
+ #
+-embedded_runpath_prefix  ?= /opt/Ice-$(VERSION_MAJOR).$(VERSION_MINOR)
++#embedded_runpath_prefix  ?= /opt/Ice-$(VERSION_MAJOR).$(VERSION_MINOR)
+ 
+ #
+ # Define OPTIMIZE as yes if you want to build with optimization.
+@@ -78,7 +78,8 @@
+ 
+ libdir			= $(top_srcdir)/ruby
+ install_rubydir		= $(prefix)/ruby
+-install_libdir	        = $(prefix)/ruby
++install_rblibdir	= $(prefix)/ruby
++install_libdir	        = $(install_rblibdir)
+ 
+ #
+ # Platform specific definitions

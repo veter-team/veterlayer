@@ -1,0 +1,14 @@
+Index: zeroc-ice/py/config/Make.rules
+===================================================================
+--- zeroc-ice.orig/py/config/Make.rules	2010-09-15 16:48:49.000000000 +0200
++++ zeroc-ice/py/config/Make.rules	2010-09-15 16:49:19.000000000 +0200
+@@ -81,7 +81,8 @@
+ 
+ libdir			= $(top_srcdir)/python
+ install_pythondir	= $(prefix)/python
+-install_libdir		= $(prefix)/python
++install_pylibdir	= $(prefix)/python
++install_libdir		= $(install_pylibdir)
+ 
+ #
+ # Platform specific definitions

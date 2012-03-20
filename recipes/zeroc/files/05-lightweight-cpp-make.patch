@@ -1,0 +1,26 @@
+Index: zeroc-ice/cpp/Makefile
+===================================================================
+--- zeroc-ice.orig/cpp/Makefile	2010-09-16 00:39:33.000000000 +0200
++++ zeroc-ice/cpp/Makefile	2010-09-16 00:39:41.000000000 +0200
+@@ -11,7 +11,7 @@
+ 
+ include $(top_srcdir)/config/Make.rules
+ 
+-SUBDIRS		= config src include test demo
++SUBDIRS		= config src include
+ 
+ INSTALL_SUBDIRS	= $(install_bindir) $(install_libdir) $(install_includedir) $(install_configdir)
+ 
+Index: zeroc-ice/cs/Makefile
+===================================================================
+--- zeroc-ice.orig/cs/Makefile	2010-09-16 00:39:56.000000000 +0200
++++ zeroc-ice/cs/Makefile	2010-09-16 00:40:05.000000000 +0200
+@@ -11,7 +11,7 @@
+ 
+ include $(top_srcdir)/config/Make.rules.cs
+ 
+-SUBDIRS		= src test demo
++SUBDIRS		= src
+ 
+ install:: install-common
+ 	@if test ! -d $(install_bindir) ; \

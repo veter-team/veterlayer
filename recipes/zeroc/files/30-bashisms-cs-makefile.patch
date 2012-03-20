@@ -1,0 +1,11 @@
+--- a/cs/config/Make.rules.cs
++++ b/cs/config/Make.rules.cs
+@@ -176,7 +176,7 @@
+ ifneq ($(POLICY_TARGET),)
+ 
+ $(bindir)/$(POLICY_TARGET):
+-	@echo -e " \
++	@printf " \
+ <configuration> \n \
+   <runtime> \n \
+     <assemblyBinding xmlns=\"urn:schemas-microsoft-com:asm.v1\"> \n \

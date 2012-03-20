@@ -1,0 +1,200 @@
+Index: zeroc-ice/java/src/IceGridGUI/ApplicationPane.java
+===================================================================
+--- zeroc-ice.orig/java/src/IceGridGUI/ApplicationPane.java	2011-06-27 22:37:15.028078333 +0200
++++ zeroc-ice/java/src/IceGridGUI/ApplicationPane.java	2011-06-27 22:37:20.136089772 +0200
+@@ -29,7 +29,6 @@
+ 
+ import com.jgoodies.looks.Options;
+ import com.jgoodies.looks.plastic.PlasticLookAndFeel;
+-import com.jgoodies.looks.windows.WindowsLookAndFeel;
+ import com.jgoodies.forms.factories.Borders;
+ 
+ import IceGrid.*;
+Index: zeroc-ice/java/config/build.properties
+===================================================================
+--- zeroc-ice.orig/java/config/build.properties	2011-06-27 22:37:15.076078441 +0200
++++ zeroc-ice/java/config/build.properties	2011-06-27 22:37:20.140089783 +0200
+@@ -31,9 +31,9 @@
+ # These properties only need to be set if you want to build the
+ # standalone jar for the IceGrid GUI.
+ #
+-jgoodies.common = /usr/share/java/jgoodies-common-1.2.0.jar
+-jgoodies.forms  = /usr/share/java/jgoodies-forms-1.4.1.jar
+-jgoodies.looks  = /usr/share/java/jgoodies-looks-2.4.1.jar
++jgoodies.common = /usr/share/java/jgoodies-common.jar
++jgoodies.forms  = /usr/share/java/forms.jar
++jgoodies.looks  = /usr/share/java/looks.jar
+ #jgoodies.common = C:/Program\ Files/ZeroC/Ice-${ice.version}-ThirdParty/lib/jgoodies-common-1.2.0.jar
+ #jgoodies.forms  = C:/Program\ Files/ZeroC/Ice-${ice.version}-ThirdParty/lib/jgoodies-forms-1.4.1.jar
+ #jgoodies.looks  = C:/Program\ Files/ZeroC/Ice-${ice.version}-ThirdParty/lib/jgoodies-looks-2.4.1.jar
+Index: zeroc-ice/java/config/icegridgui.pro
+===================================================================
+--- zeroc-ice.orig/java/config/icegridgui.pro	2011-06-27 22:37:15.056078396 +0200
++++ zeroc-ice/java/config/icegridgui.pro	2011-06-27 22:37:20.140089783 +0200
+@@ -12,7 +12,7 @@
+     public static void main(java.lang.String[]);
+ }
+ 
+-# Following options are useful for debugging. 
++# Following options are useful for debugging.
+ # -printseeds
+ # -verbose
+ 
+@@ -48,7 +48,7 @@
+     java.lang.Object readResolve();
+ }
+ 
+-# Your application may contain more items that need to be preserved; 
++# Your application may contain more items that need to be preserved;
+ # typically classes that are dynamically created using Class.forName:
+ 
+ -keep public class Ice.** {
+@@ -63,7 +63,6 @@
+ -keep interface IceGrid.**
+ -keep class com.jgoodies.looks.plastic.PlasticXPLookAndFeel
+ -keep class com.jgoodies.looks.plastic.PlasticFieldCaret
+--keep class com.jgoodies.looks.windows.WindowsFieldCaret 
+ -keep public class javax.**
+ -keep interface javax.**
+ -keep class * implements javax.**
+Index: zeroc-ice/java/build.xml
+===================================================================
+--- zeroc-ice.orig/java/build.xml	2011-06-27 22:37:15.044078366 +0200
++++ zeroc-ice/java/build.xml	2011-06-27 22:37:40.544135482 +0200
+@@ -230,7 +230,7 @@
+             <include name="Freeze/**"/>
+             <manifest>
+                 <attribute name="Built-By" value="ZeroC, Inc."/>
+-                <attribute name="Class-Path" value="db.jar db-${db.version}.jar /usr/share/java/db-${db.version}.jar ../db.jar"/>
++                <attribute name="Class-Path" value="db.jar db-${db.version}.jar /usr/share/java/db.jar ../db.jar"/>
+             </manifest>
+         </jar>
+         <jar jarfile="${lib.dir}/Freeze.jar" basedir="${src.dir}" update="yes">
+@@ -408,7 +408,7 @@
+             </includepath>
+             <fileset dir="${slice.dir}/Ice" includes="Identity.ice"/>
+            <dict name="test.Freeze.dbmap.IntIdentityMapWithIndex" key="int" value="Ice::Identity"/>
+-           <dictindex name="test.Freeze.dbmap.IntIdentityMapWithIndex" member="category"/>  
++           <dictindex name="test.Freeze.dbmap.IntIdentityMapWithIndex" member="category"/>
+         </slice2freezej>
+         <slice2freezej ice="on" outputdir="${generated.test.dir}">
+            <includepath>
+@@ -416,7 +416,7 @@
+             </includepath>
+             <fileset dir="${slice.dir}/Ice" includes="Identity.ice"/>
+            <dict name="test.Freeze.dbmap.SortedMap" key="int" value="Ice::Identity"/>
+-           <dictindex name="test.Freeze.dbmap.SortedMap" member="category"/>  
++           <dictindex name="test.Freeze.dbmap.SortedMap" member="category"/>
+         </slice2freezej>
+ 
+         <slice2java stream="on" outputdir="${generated.test.dir}" dependencyfile="${generated.test.dir}/.depend.Test">
+@@ -503,7 +503,7 @@
+ 
+     <condition property="build-icegridadmin-pro-jar">
+         <and>
+-            <available classname="proguard.ant.ProGuardTask" classpath="${env.CLASSPATH}" />
++            <!-- <available classname="proguard.ant.ProGuardTask" classpath="${env.CLASSPATH}" /> -->
+             <available file="${jgoodies.looks}" />
+             <available file="${jgoodies.forms}" />
+             <available file="${jgoodies.common}" />
+@@ -517,7 +517,7 @@
+     <target name="icegridadmin-plain-jar" depends="icegridadmin-compile" if="build-icegridadmin-plain-jar" unless="ice.bin.dist">
+         <manifest file="${lib.dir}/icegridgui.mf">
+             <attribute name="Main-Class" value="IceGridGUI.Main"/>
+-            <attribute name="Class-Path" value="Ice.jar ${jgoodies.forms} ${jgoodies.looks} ${jgoodies.common} ../resources/ "/>
++            <attribute name="Class-Path" value="Ice.jar ${jgoodies.forms} ${jgoodies.looks} ${jgoodies.common} "/>
+         </manifest>
+         <jar jarfile="${lib.dir}/IceGridGUI.jar" manifest="${lib.dir}/icegridgui.mf" basedir="${lib.dir}">
+             <include name="IceGridGUI/**"/>
+@@ -562,7 +562,7 @@
+            <filelist dir="${library.jarpath}" files="${library.jarfiles}"/>
+            <mapper>
+               <!-- Add quotes around the path of each JAR file (necessary for Windows) -->
+-              <globmapper from="*" to="&quot;*&quot;"/>   
++              <globmapper from="*" to="&quot;*&quot;"/>
+            </mapper>
+         </pathconvert>
+ 
+@@ -578,7 +578,7 @@
+             <include name="icons/**"/>
+         </jar>
+ 
+-        <taskdef resource="proguard/ant/task.properties"/>
++        <taskdef resource="proguard/ant/task.properties" classpath="/usr/share/java/proguard.jar"/>
+ 
+         <proguard>
+              -injars "${lib.dir}/IceGridGUItemp.jar"
+@@ -610,50 +610,55 @@
+ 
+     <target name="dist-jar" depends="ice-jar, freeze-jar, icegridadmin-plain-jar, icegridadmin-pro-jar"/>
+ 
+-    <target name="jar" depends="dist-jar, test-jar"/>
++    <!-- <target name="jar" depends="dist-jar, test-jar"/> -->
++    <target name="jar" depends="dist-jar"/>
+ 
+     <target name="test" depends="test-compile, ice-compile"/>
+ 
+     <target name="all" depends="jar">
+-      <ant inheritAll="false" dir="test"/>
+-      <ant inheritAll="false" dir="demo"/>
++      <!-- <ant inheritAll="false" dir="test"/> -->
++      <!-- <ant inheritAll="false" dir="demo"/> -->
+     </target>
+ 
+     <target name="install-common">
+         <mkdir dir="${prefix}"/>
+         <mkdir dir="${prefix}/lib"/>
+-        <copy file="${ice.dir}/LICENSE" todir="${prefix}"/>
+-        <copy file="${ice.dir}/ICE_LICENSE" todir="${prefix}"/>
++	<mkdir dir="${prefix}/share"/>
++        <mkdir dir="${prefix}/share/java"/>
++        <mkdir dir="${prefix}/share/ant"/>
++        <mkdir dir="${prefix}/share/ant/lib"/>
++        <!-- <copy file="${ice.dir}/LICENSE" todir="${prefix}"/> -->
++        <!-- <copy file="${ice.dir}/ICE_LICENSE" todir="${prefix}"/> -->
+     </target>
+ 
+     <condition property="slice-installed">
+         <and>
+-            <available file="${prefix}/slice/Ice/Communicator.ice"/>
++            <available file="${prefix}/share/Ice-3.4.2/slice/Ice/Communicator.ice"/>
+         </and>
+     </condition>
+ 
+     <target name="install-slice" unless="slice-installed">
+-        <mkdir dir="${prefix}/slice"/>
+-        <copy todir="${prefix}/slice">
+-            <fileset dir="../slice" includes="**"/>
+-        </copy>
++      <mkdir dir="${prefix}/share/Ice-3.4.2/slice"/>
++      <copy todir="${prefix}/share/Ice-3.4.2/slice">
++	<fileset dir="../slice" includes="**"/>
++      </copy>
+     </target>
+ 
+     <target name="install-icegridgui-jar">
+-        <mkdir dir="${prefix}/help"/>
+-        <copy file="${lib.dir}/IceGridGUI.jar" todir="${prefix}/lib"/>
+-        <copy todir="${prefix}/help">
+-            <fileset dir="resources" includes="IceGridAdmin/**"/>
+-        </copy>
++      <mkdir dir="${prefix}/share/help"/>
++      <copy file="${lib.dir}/IceGridGUI.jar" todir="${prefix}/share/java"/>
++      <copy todir="${prefix}/share/help">
++	<fileset dir="resources" includes="IceGridAdmin/**"/>
++      </copy>
+     </target>
+ 
+     <target name="install-jar">
+-        <copy file="${lib.dir}/Ice.jar" todir="${prefix}/lib"/>
+-        <copy file="${lib.dir}/Freeze.jar" todir="${prefix}/lib"/>
++        <copy file="${lib.dir}/Ice.jar" todir="${prefix}/share/java"/>
++        <copy file="${lib.dir}/Freeze.jar" todir="${prefix}/share/java"/>
+     </target>
+ 
+     <target name="install-tasks">
+-        <copy file="${lib.dir}/ant-ice.jar" todir="${prefix}/lib"/>
++        <copy file="${lib.dir}/ant-ice.jar" todir="${prefix}/share/ant/lib"/>
+     </target>
+ 
+     <target name="install" depends="dist-jar, install-common, install-jar, install-icegridgui-jar, install-tasks, install-slice">

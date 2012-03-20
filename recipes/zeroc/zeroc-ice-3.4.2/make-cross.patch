@@ -1,0 +1,321 @@
+Index: Ice-3.4.2/cpp/config/Make.rules.Linux
+===================================================================
+--- Ice-3.4.2.orig/cpp/config/Make.rules.Linux	2012-03-19 22:07:18.867541497 +0100
++++ Ice-3.4.2/cpp/config/Make.rules.Linux	2012-03-19 22:07:19.291753479 +0100
+@@ -31,7 +31,9 @@
+    CXX			= c++
+ endif
+ 
+-ifeq ($(CXX),c++)
++ifeq ($(AR),)
++   AR			= ar
++endif
+ 
+     ifneq ($(SUSE_i586),)
+         CXXARCHFLAGS	+= -march=i586
+@@ -67,15 +69,7 @@
+       CXXARCHFLAGS	+= -mtune=v8 -pipe -Wno-deprecated -DICE_USE_MUTEX_SHARED
+    endif
+ 
+-   ifeq ($(MACHINE),x86_64)
+-      ifeq ($(LP64),yes)
+-         CXXARCHFLAGS	+= -m64
+-      else
+-         CXXARCHFLAGS	+= -m32
+-      endif
+-   endif
+-
+-   CXXFLAGS		= $(CXXARCHFLAGS) -Wall -D_REENTRANT -DHAVE_ENDIAN_H -DHAVE_LIMITS_H
++   CXXFLAGS		+= $(CXXARCHFLAGS) -Wall -D_REENTRANT -DHAVE_ENDIAN_H -DHAVE_LIMITS_H -DHAVE_CXX_STDHEADERS
+ 
+    ifneq ($(GENPIC),no)
+       CXXFLAGS		+= -fPIC
+@@ -90,11 +84,11 @@
+    #
+    # C++ run-time libraries, necessary for linking some shared libraries.
+    #
+-   CXXLIBS		=
++   CXXLIBS		= 
+ 
+    mkshlib		= $(CXX) -shared $(LDFLAGS) -o $(1) -Wl,-h,$(2) $(3) $(4) -lpthread -lrt
+ 
+-   mklib		= ar cr $(1) $(2)
++   mklib		= $(AR) cr $(1) $(2)
+ 
+    rpathlink            = -Wl,-rpath-link,$(1)
+ 
+@@ -106,8 +100,6 @@
+ 
+    LDPLATFORMFLAGS	+= -rdynamic
+ 
+-endif
+-
+ ifeq ($(CXX),icpc)
+    $(warning ===================================================================)
+    $(warning Intel C++ is currently not supported. The Ice team does not)
+Index: Ice-3.4.2/cpp/config/Make.rules
+===================================================================
+--- Ice-3.4.2.orig/cpp/config/Make.rules	2012-03-19 22:07:19.175695484 +0100
++++ Ice-3.4.2/cpp/config/Make.rules	2012-03-19 22:07:19.291753479 +0100
+@@ -166,10 +166,10 @@
+ include	 $(top_srcdir)/config/Make.rules.$(UNAME)
+ 
+ install_includedir	:= $(prefix)/include
+-install_docdir		:= $(prefix)/doc
++install_docdir		:= $(prefix)/share/doc
+ install_bindir	  	:= $(prefix)/$(binsubdir)
+ install_libdir	  	:= $(prefix)/$(libsubdir)
+-install_configdir 	:= $(prefix)/config
++install_configdir 	:= $(prefix)/share/Ice-$(VERSION)/config
+ 
+ ifneq ($(embedded_runpath_prefix),)
+     runpath_libdir	:= $(embedded_runpath_prefix)/$(libsubdir)
+@@ -272,18 +272,18 @@
+ 
+ $(HDIR)/%F.h: $(SDIR)/%F.ice $(SLICE2CPP) $(SLICEPARSERLIB)
+ 	rm -f $(HDIR)/$(*F)F.h $(*F)F.cpp
+-	$(SLICE2CPP) $(SLICE2CPPFLAGS) $<
++	slice2cpp $(SLICE2CPPFLAGS) $<
+ 	mv $(*F)F.h $(HDIR)
+ 	rm -f $(*F)F.cpp
+ 
+ $(HDIR)/%.h %.cpp: $(SDIR)/%.ice $(SLICE2CPP) $(SLICEPARSERLIB)
+ 	rm -f $(HDIR)/$(*F).h $(*F).cpp
+-	$(SLICE2CPP) $(SLICE2CPPFLAGS) $<
++	slice2cpp $(SLICE2CPPFLAGS) $<
+ 	mv $(*F).h $(HDIR)
+ 
+ %.h %.cpp: %.ice $(SLICE2CPP) $(SLICEPARSERLIB)
+ 	rm -f $(*F).h $(*F).cpp
+-	$(SLICE2CPP) $(SLICE2CPPFLAGS) $(*F).ice	
++	slice2cpp $(SLICE2CPPFLAGS) $(*F).ice	
+ 
+ #%.h %.cpp: %.y
+ #	rm -f $(*F).h $(*F).cpp
+Index: Ice-3.4.2/cpp/src/Ice/Makefile
+===================================================================
+--- Ice-3.4.2.orig/cpp/src/Ice/Makefile	2011-06-15 21:43:58.000000000 +0200
++++ Ice-3.4.2/cpp/src/Ice/Makefile	2012-03-19 22:07:19.291753479 +0100
+@@ -175,7 +175,7 @@
+ 
+ $(HDIR)/BuiltinSequences.h BuiltinSequences.cpp: $(SDIR)/BuiltinSequences.ice $(SLICE2CPP) $(SLICEPARSERLIB)
+ 	rm -f $(HDIR)/BuiltinSequences.h BuiltinSequences.cpp
+-	$(SLICE2CPP) $(SLICE2CPPFLAGS) --stream $(SDIR)/BuiltinSequences.ice
++	slice2cpp $(SLICE2CPPFLAGS) --stream $(SDIR)/BuiltinSequences.ice
+ 	mv BuiltinSequences.h $(HDIR)
+ 
+ include .depend
+Index: Ice-3.4.2/cpp/src/Freeze/Makefile
+===================================================================
+--- Ice-3.4.2.orig/cpp/src/Freeze/Makefile	2011-06-15 21:43:58.000000000 +0200
++++ Ice-3.4.2/cpp/src/Freeze/Makefile	2012-03-19 22:07:19.291753479 +0100
+@@ -72,7 +72,7 @@
+ $(HDIR)/Catalog.h: Catalog.cpp
+ Catalog.cpp: $(SDIR)/CatalogData.ice $(SLICE2FREEZE) $(SLICEPARSERLIB)
+ 	rm -f  $(HDIR)/Catalog.h Catalog.cpp
+-	$(SLICE2FREEZE) $(SLICE2CPPFLAGS) --dict Freeze::Catalog,string,Freeze::CatalogData \
++	slice2freeze $(SLICE2CPPFLAGS) --dict Freeze::Catalog,string,Freeze::CatalogData \
+ 	Catalog $(slicedir)/Freeze/CatalogData.ice
+ 	mv Catalog.h $(HDIR)/Catalog.h
+ 
+@@ -82,7 +82,7 @@
+ $(HDIR)/CatalogIndexList.h: CatalogIndexList.cpp
+ CatalogIndexList.cpp: $(slicedir)/Ice/BuiltinSequences.ice $(SLICE2FREEZE) $(SLICEPARSERLIB)
+ 	rm -f  $(HDIR)/CatalogIndexList.h CatalogIndexList.cpp
+-	$(SLICE2FREEZE) $(SLICE2CPPFLAGS) --dict Freeze::CatalogIndexList,string,Ice::StringSeq \
++	slice2freeze $(SLICE2CPPFLAGS) --dict Freeze::CatalogIndexList,string,Ice::StringSeq \
+ 	CatalogIndexList ../../../slice/Ice/BuiltinSequences.ice
+ 	mv CatalogIndexList.h $(HDIR)/CatalogIndexList.h
+ 
+Index: Ice-3.4.2/cpp/src/IceStorm/FreezeDB/Makefile
+===================================================================
+--- Ice-3.4.2.orig/cpp/src/IceStorm/FreezeDB/Makefile	2011-06-15 21:43:59.000000000 +0200
++++ Ice-3.4.2/cpp/src/IceStorm/FreezeDB/Makefile	2012-03-19 22:07:19.295755478 +0100
+@@ -44,13 +44,13 @@
+ HDIR		= $(headerdir)/IceStorm
+ SDIR		= $(slicedir)/IceStorm
+ 
+-SLICE2FREEZECMD = $(SLICE2FREEZE) -I../.. --ice --include-dir IceStorm/FreezeDB $(ICECPPFLAGS)
++SLICE2FREEZECMD = slice2freeze -I../.. --ice --include-dir IceStorm/FreezeDB $(ICECPPFLAGS)
+ 
+ include $(top_srcdir)/config/Make.rules
+ 
+ CPPFLAGS	:= -I../.. $(CPPFLAGS)
+ SLICE2CPPFLAGS	:= -I../.. --ice --include-dir IceStorm/FreezeDB $(SLICE2CPPFLAGS)
+-LINKWITH        := $(DB_RPATH_LINK) -lIceStormService -lIceStorm -lFreeze -lIceDB -lIce -lIceUtil 
++LINKWITH        := $(DB_RPATH_LINK) -lIceStormService -lIceStorm -lFreeze -lIceDB -lIce -lIceUtil
+ 
+ $(libdir)/$(LIBFILENAME): $(OBJS) $(DB_OBJS)
+ 	rm -f $@
+@@ -66,7 +66,7 @@
+ 
+ $(MIGRATE): $(MOBJS)
+ 	rm -f $@
+-	$(CXX) $(LDFLAGS) -o $@ $(MOBJS) $(DB_RPATH_LINK) -lIceStormService -lIceStorm -lFreeze $(LIBS)
++	$(CXX) $(LDFLAGS) -o $@ $(MOBJS) $(DB_RPATH_LINK) -lIceStormService -lIceGrid -lGlacier2 -lIceDB -lIceBox -lIceStorm -lFreeze $(LIBS)
+ 
+ # The slice2freeze rules are structured like this to avoid issues with
+ # parallel make.
+Index: Ice-3.4.2/cpp/src/IceGrid/FreezeDB/Makefile
+===================================================================
+--- Ice-3.4.2.orig/cpp/src/IceGrid/FreezeDB/Makefile	2011-06-15 21:43:59.000000000 +0200
++++ Ice-3.4.2/cpp/src/IceGrid/FreezeDB/Makefile	2012-03-19 22:07:19.295755478 +0100
+@@ -30,7 +30,7 @@
+ HDIR		= $(headerdir)/IceGrid
+ SDIR		= $(slicedir)/IceGrid
+ 
+-SLICE2FREEZECMD = $(SLICE2FREEZE) --ice --include-dir IceGrid/FreezeDB $(ICECPPFLAGS)
++SLICE2FREEZECMD = slice2freeze --ice --include-dir IceGrid/FreezeDB $(ICECPPFLAGS)
+ 
+ include $(top_srcdir)/config/Make.rules
+ 
+Index: Ice-3.4.2/py/config/Make.rules
+===================================================================
+--- Ice-3.4.2.orig/py/config/Make.rules	2012-03-19 22:07:18.651433506 +0100
++++ Ice-3.4.2/py/config/Make.rules	2012-03-19 22:22:18.378274881 +0100
+@@ -41,14 +41,14 @@
+ #
+ # If multiple versions of Python are installed and you want a specific
+ # version used for building the Ice extension, then set PYTHON_VERSION
+-# to a value like "python2.5". Otherwise, the settings below use the
++# to a value like "python4.5". Otherwise, the settings below use the
+ # default Python interpreter found in your PATH.
+ #
+-PYTHON_VERSION	    ?= python$(shell python -c "import sys; import distutils.sysconfig as ds; sys.stdout.write(ds.get_python_version())")
++PYTHON_VERSION ?= python2.6
+ 
+-PYTHON_INCLUDE_DIR  ?= $(shell $(PYTHON_VERSION) -c "import sys; import distutils.sysconfig as ds; sys.stdout.write(ds.get_python_inc())")
++PYTHON_INCLUDE_DIR ?= /home/angstrom/setup-scripts/build/tmp-angstrom_2008_1/sysroots/armv7a-angstrom-linux-gnueabi/usr/include/python2.6
+ 
+-PYTHON_LIB_DIR	    ?= $(shell $(PYTHON_VERSION) -c "import os; import sys; import distutils.sysconfig as ds; sys.stdout.write(os.path.join(ds.get_python_lib(plat_specific=1,standard_lib=1), 'config'))")
++PYTHON_LIB_DIR ?= /usr/lib/python2.6
+ 
+ PYTHON_FLAGS	    ?= -I$(PYTHON_INCLUDE_DIR)
+ PYTHON_LIBS	    ?= -L$(PYTHON_LIB_DIR) -l$(PYTHON_VERSION)
+@@ -80,9 +80,9 @@
+ endif
+ 
+ libdir			= $(top_srcdir)/python
+-install_pythondir	= $(prefix)/python
+-install_pylibdir	= $(prefix)/python
+-install_libdir		= $(install_pylibdir)
++install_pythondir	= $(prefix)/lib/$(PYTHON_VERSION)
++install_pylibdir	= $(install_pythondir)
++install_libdir		= $(prefix)/lib
+ 
+ #
+ # Platform specific definitions
+@@ -147,7 +147,7 @@
+ 
+ %_ice.py: $(slicedir)/%.ice
+ 	rm -f $(*F).py
+-	$(SLICE2PY) $(SLICE2PYFLAGS) $<
++	slice2py $(SLICE2PYFLAGS) $<
+ 
+ .cpp.o:
+ 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $<
+Index: Ice-3.4.2/py/python/Makefile
+===================================================================
+--- Ice-3.4.2.orig/py/python/Makefile	2011-06-15 21:44:00.000000000 +0200
++++ Ice-3.4.2/py/python/Makefile	2012-03-19 22:07:19.295755478 +0100
+@@ -99,22 +99,22 @@
+ SLICE2PYFLAGS	+= --ice
+ 
+ Ice_%_ice.py: $(slicedir)/Ice/%.ice $(SLICE2PY) $(SLICEPARSERLIB)
+-	$(SLICE2PY) --prefix Ice_ --no-package $(SLICE2PYFLAGS) $<
++	slice2py --prefix Ice_ --no-package $(SLICE2PYFLAGS) $<
+ 
+ Glacier2_%_ice.py: $(slicedir)/Glacier2/%.ice $(SLICE2PY) $(SLICEPARSERLIB)
+-	$(SLICE2PY) --prefix Glacier2_ --no-package --checksum $(SLICE2PYFLAGS) $<
++	slice2py --prefix Glacier2_ --no-package --checksum $(SLICE2PYFLAGS) $<
+ 
+ IceBox_%_ice.py: $(slicedir)/IceBox/%.ice $(SLICE2PY) $(SLICEPARSERLIB)
+-	$(SLICE2PY) --prefix IceBox_ --checksum $(SLICE2PYFLAGS) $<
++	slice2py --prefix IceBox_ --checksum $(SLICE2PYFLAGS) $<
+ 
+ IceGrid_%_ice.py: $(slicedir)/IceGrid/%.ice $(SLICE2PY) $(SLICEPARSERLIB)
+-	$(SLICE2PY) --prefix IceGrid_ --checksum $(SLICE2PYFLAGS) $<
++	slice2py --prefix IceGrid_ --checksum $(SLICE2PYFLAGS) $<
+ 
+ IcePatch2_%_ice.py: $(slicedir)/IcePatch2/%.ice $(SLICE2PY) $(SLICEPARSERLIB)
+-	$(SLICE2PY) --prefix IcePatch2_ --checksum $(SLICE2PYFLAGS) $<
++	slice2py --prefix IcePatch2_ --checksum $(SLICE2PYFLAGS) $<
+ 
+ IceStorm_%_ice.py: $(slicedir)/IceStorm/%.ice $(SLICE2PY) $(SLICEPARSERLIB)
+-	$(SLICE2PY) --prefix IceStorm_ --checksum $(SLICE2PYFLAGS) $<
++	slice2py --prefix IceStorm_ --checksum $(SLICE2PYFLAGS) $<
+ 
+ install:: $(ALL_SRCS)
+ 	@echo "Installing generated code"
+Index: Ice-3.4.2/config/Make.common.rules
+===================================================================
+--- Ice-3.4.2.orig/config/Make.common.rules	2011-06-15 21:43:58.000000000 +0200
++++ Ice-3.4.2/config/Make.common.rules	2012-03-19 22:07:19.295755478 +0100
+@@ -56,22 +56,22 @@
+     lp64binsuffix	= /pa20_64
+ endif
+ 
+-ifeq ($(UNAME),Linux)
+-   ifeq ($(MACHINE_TYPE),x86_64)
+-      lp64suffix	= 64
+-      ifeq ($(LP64),)
+-          LP64      	= yes
+-      endif
+-   endif
+-endif
+-
+-ifeq ($(LP64),yes)
+-    libsubdir		  := lib$(lp64suffix)
+-    binsubdir		  := bin$(lp64binsuffix)
+-else
++#ifeq ($(UNAME),Linux)
++#   ifeq ($(MACHINE_TYPE),x86_64)
++#      lp64suffix	= 64
++#      ifeq ($(LP64),)
++#          LP64      	= yes
++#      endif
++#   endif
++#endif
++#
++#ifeq ($(LP64),yes)
++#    libsubdir		  := lib$(lp64suffix)
++#    binsubdir		  := bin$(lp64binsuffix)
++#else
+     libsubdir		  := lib
+     binsubdir		  := bin
+-endif
++#endif
+ 
+ #
+ # The following variables might also be defined:
+@@ -218,7 +218,7 @@
+     slicedir = $(ice_dir)/slice
+ endif
+ 
+-install_slicedir = $(prefix)/slice
++install_slicedir = $(prefix)/share/Ice-$(VERSION)/slice
+ 
+ #
+ # Set environment variables for the Slice translator.
+@@ -345,7 +345,7 @@
+ 	@if test ! -d $(install_slicedir) ; \
+ 	then \
+ 	    echo "Creating $(install_slicedir)..." ; \
+-	    $(call mkdir, $(install_slicedir)) ; \
++	    $(call mkdir, $(install_slicedir) -p) ; \
+ 	    cd $(top_srcdir)/../slice ; \
+ 	    for subdir in * ; \
+ 	    do \
+Index: Ice-3.4.2/py/Makefile
+===================================================================
+--- Ice-3.4.2.orig/py/Makefile	2011-06-15 21:44:00.000000000 +0200
++++ Ice-3.4.2/py/Makefile	2012-03-19 22:07:19.295755478 +0100
+@@ -17,7 +17,7 @@
+ 	@if test ! -d $(install_pythondir) ; \
+ 	then \
+ 	    echo "Creating $(install_pythondir)..." ; \
+-	    $(call mkdir,$(install_pythondir)) ; \
++	    $(call mkdir,$(install_pythondir), -p) ; \
+ 	fi
+ 
+ $(EVERYTHING)::

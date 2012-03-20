@@ -1,0 +1,14 @@
+Index: zeroc-ice/cs/config/Make.rules.cs
+===================================================================
+--- zeroc-ice.orig/cs/config/Make.rules.cs	2010-09-16 00:35:19.000000000 +0200
++++ zeroc-ice/cs/config/Make.rules.cs	2010-09-16 00:36:08.000000000 +0200
+@@ -73,7 +73,8 @@
+ 
+ bindir = $(top_srcdir)/bin
+ 
+-install_bindir		= $(prefix)/bin
++install_clibindir	= $(prefix)/bin
++install_bindir		= $(install_clibindir)
+ 
+ install_libdir		= $(prefix)/lib
+ 

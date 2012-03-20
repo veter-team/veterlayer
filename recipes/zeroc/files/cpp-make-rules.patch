@@ -1,0 +1,11 @@
+--- a/cpp/config/Make.rules
++++ b/cpp/config/Make.rules
+@@ -210,7 +210,7 @@
+ ifeq ($(PLATFORM_HAS_READLINE),yes)
+     ifeq ($(USE_READLINE),yes)
+         READLINE_FLAGS  = -DHAVE_READLINE $(if $(READLINE_HOME),-I$(READLINE_HOME)/include)
+-        READLINE_LIBS   = $(if $(READLINE_HOME),-L$(READLINE_HOME)/$(libsubdir)) -lreadline -lncurses        
++        READLINE_LIBS   = $(if $(READLINE_HOME),-L$(READLINE_HOME)/$(libsubdir)) -lreadline
+     endif
+ endif
+ 

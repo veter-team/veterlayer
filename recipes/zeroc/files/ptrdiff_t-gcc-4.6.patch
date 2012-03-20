@@ -1,0 +1,12 @@
+Index: zeroc-ice/cpp/include/Ice/Config.h
+===================================================================
+--- zeroc-ice.orig/cpp/include/Ice/Config.h	2011-05-02 18:14:28.000000000 +0200
++++ zeroc-ice/cpp/include/Ice/Config.h	2011-05-02 18:15:50.000000000 +0200
+@@ -21,6 +21,7 @@
+ #include <string>
+ #include <vector>
+ #include <map>
++#include <cstddef>
+ 
+ #if defined(_WIN32)
+ #   include <process.h>
