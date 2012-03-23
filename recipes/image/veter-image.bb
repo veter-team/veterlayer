@@ -59,6 +59,9 @@ IMAGE_PREPROCESS_COMMAND += "install -c -m 644 ${FILE_DIRNAME}/files/interfaces 
 IMAGE_PREPROCESS_COMMAND += "install -c -m 600 ${FILE_DIRNAME}/files/wpa_supplicant.conf ${IMAGE_ROOTFS}/etc/;"
 IMAGE_PREPROCESS_COMMAND += "install -c -m 644 ${FILE_DIRNAME}/files/ar9170.fw ${IMAGE_ROOTFS}/lib/firmware/;"
 
+# Fix inittab for new kernel
+IMAGE_PREPROCESS_COMMAND += "sed -i 's/ttyS/ttyO/g' ${IMAGE_ROOTFS}/etc/inittab;"
+
 RDEPENDS_kernel-base = ""
 
 export IMAGE_BASENAME = "veter-image"
