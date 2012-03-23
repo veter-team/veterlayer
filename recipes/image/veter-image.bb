@@ -26,7 +26,7 @@ IMAGE_INSTALL += " ti-codecs-omap3530-server ti-cmem-module ti-dsplink-module ti
 #IMAGE_INSTALL += " kernel-module-ar9170usb easycapdc60 "
 
 # Kernel > .35, the easycap is part of the mainline kernel
-# IMAGE_INSTALL += " kernel-module-ar9170usb kernel-module-easycap "
+IMAGE_INSTALL += " kernel-module-ar9170usb kernel-module-easycap "
 
 # GStreamer related installs
 IMAGE_INSTALL += " gstreamer gst-plugins-base gst-plugins-base-apps gst-plugin-app gst-plugin-ffmpegcolorspace "
