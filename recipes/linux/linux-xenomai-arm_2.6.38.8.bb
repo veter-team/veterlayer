@@ -1,4 +1,4 @@
-require recipes/linux/linux.inc
+require recipes-kernel/linux/linux.inc
 
 DESCRIPTION = "Linux kernel for for beagleboard with xenomai patch"
 KERNEL_IMAGETYPE = "uImage"
@@ -11,7 +11,7 @@ PV = "2.6.38.8"
 
 FILESPATHPKG_prepend = "linux-xenomai-2.6.38:"
 
-SRC_URI = "${KERNELORG_MIRROR}/pub/linux/kernel/v2.6/linux-${PV}.tar.bz2;name=kernel \
+SRC_URI = "http://www.kernel.org/pub/linux/kernel/v2.6/linux-${PV}.tar.bz2;name=kernel \
 	   file://linux-xenomai-arm-2.6.38.8.patch \
 	   file://defconfig"
 

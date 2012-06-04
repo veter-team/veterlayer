@@ -1,5 +1,7 @@
 require xenomai.inc
 
+LIC_FILES_CHKSUM = "file://include/COPYING;md5=60faa041c8d4a75ab87e115a9469d94d"
+
 SRC_URI = "http://download.gna.org/xenomai/stable/xenomai-${PV}.tar.bz2 \
 	   file://Makefile-sudo.patch;apply=yes "
 

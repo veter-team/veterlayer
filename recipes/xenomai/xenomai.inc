@@ -1,6 +1,6 @@
 SECTION = "base"
 DESCRIPTION = "Xenomai user space tools"
-LICENSE = "xenomai"
+LICENSE = "LGPL"
 
 inherit autotools
 

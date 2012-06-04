@@ -1,6 +1,8 @@
 DESCRIPTION = "The Internet Communications Engine"
-LICENSE = "GPL"
+LICENSE = "GPLv2"
 PR = "r0"
+
+LIC_FILES_CHKSUM = "file://ICE_LICENSE;md5=5bb0f4f1a1aae1fa41e39562a94e1cda"
 
 BBCLASSEXTEND = "native"
 

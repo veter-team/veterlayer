@@ -1,8 +1,10 @@
 DESCRIPTION = "The Internet Communications Engine"
-LICENSE = "GPL"
+LICENSE = "GPLv2"
 PR = "r0"
 
-DEPENDS += "db bzip2 mcpp expat openssl python zeroc-slice-native"
+LIC_FILES_CHKSUM = "file://ICE_LICENSE;md5=5bb0f4f1a1aae1fa41e39562a94e1cda"
+
+DEPENDS += "bzip2 mcpp expat openssl python zeroc-slice-native"
 
 SRC_URI = "http://www.zeroc.com/download/Ice/3.4/Ice-${PV}.tar.gz;name=ice \
 	file://20-kfreebsd.patch \
@@ -30,7 +32,7 @@ inherit autotools python-dir
 
 TARGET_CC_ARCH += "${LDFLAGS}"
 
-PYTHON_MAJMIN = "2.6"
+PYTHON_MAJMIN = "2.7"
 
 do_compile_prepend() {
         # python stuff
@@ -54,9 +56,12 @@ do_install() {
 	oe_runmake -C ${S}/py prefix=${D}${prefix} install
 }
 
-PACKAGES =+ "python-${PN} ${PN}-slice"
+PACKAGES += "python-${PN} ${PN}-slice python-${PN}-dev python-${PN}-dbg"
 
 FILES_${PN}-slice = "${bindir}/slice* ${datadir}/Ice-${PV}/slice/*"
-FILES_${PN}-dev = "${includedir}/* ${datadir}//Ice-${PV}/config/*"
-FILES_python-${PN} = "${libdir}/*Py* ${libdir}/python${PYTHON_MAJMIN}" 
+FILES_${PN}-dev += "${includedir}/* ${datadir}/Ice-${PV}/config/*"
+FILES_python-${PN}-dev = "${libdir}/python${PYTHON_MAJMIN}/IcePy.so"
+FILES_python-${PN} = "${libdir}/python${PYTHON_MAJMIN}/*.py ${libdir}/python${PYTHON_MAJMIN}/IcePy.so.* ${libdir}/python${PYTHON_MAJMIN}/Ice*/*.py" 
+FILES_${PN} += "${prefix}/*LICENSE ${libdir}/ImportKey.class"
+FILES_python-${PN}-dbg ="${libdir}/python${PYTHON_MAJMIN}/.debug"
 

@@ -1,7 +1,7 @@
 Index: Ice-3.4.2/cpp/config/Make.rules.Linux
 ===================================================================
---- Ice-3.4.2.orig/cpp/config/Make.rules.Linux	2012-03-19 22:07:18.867541497 +0100
-+++ Ice-3.4.2/cpp/config/Make.rules.Linux	2012-03-19 22:07:19.291753479 +0100
+--- Ice-3.4.2.orig/cpp/config/Make.rules.Linux	2012-06-01 15:59:37.148153243 +0200
++++ Ice-3.4.2/cpp/config/Make.rules.Linux	2012-06-01 15:59:37.584371229 +0200
 @@ -31,7 +31,9 @@
     CXX			= c++
  endif
@@ -55,8 +55,8 @@ Index: Ice-3.4.2/cpp/config/Make.rules.Linux
     $(warning Intel C++ is currently not supported. The Ice team does not)
 Index: Ice-3.4.2/cpp/config/Make.rules
 ===================================================================
---- Ice-3.4.2.orig/cpp/config/Make.rules	2012-03-19 22:07:19.175695484 +0100
-+++ Ice-3.4.2/cpp/config/Make.rules	2012-03-19 22:07:19.291753479 +0100
+--- Ice-3.4.2.orig/cpp/config/Make.rules	2012-06-01 15:59:37.476317232 +0200
++++ Ice-3.4.2/cpp/config/Make.rules	2012-06-01 15:59:37.584371229 +0200
 @@ -166,10 +166,10 @@
  include	 $(top_srcdir)/config/Make.rules.$(UNAME)
  
@@ -95,7 +95,7 @@ Index: Ice-3.4.2/cpp/config/Make.rules
 Index: Ice-3.4.2/cpp/src/Ice/Makefile
 ===================================================================
 --- Ice-3.4.2.orig/cpp/src/Ice/Makefile	2011-06-15 21:43:58.000000000 +0200
-+++ Ice-3.4.2/cpp/src/Ice/Makefile	2012-03-19 22:07:19.291753479 +0100
++++ Ice-3.4.2/cpp/src/Ice/Makefile	2012-06-01 15:59:37.584371229 +0200
 @@ -175,7 +175,7 @@
  
  $(HDIR)/BuiltinSequences.h BuiltinSequences.cpp: $(SDIR)/BuiltinSequences.ice $(SLICE2CPP) $(SLICEPARSERLIB)
@@ -108,7 +108,7 @@ Index: Ice-3.4.2/cpp/src/Ice/Makefile
 Index: Ice-3.4.2/cpp/src/Freeze/Makefile
 ===================================================================
 --- Ice-3.4.2.orig/cpp/src/Freeze/Makefile	2011-06-15 21:43:58.000000000 +0200
-+++ Ice-3.4.2/cpp/src/Freeze/Makefile	2012-03-19 22:07:19.291753479 +0100
++++ Ice-3.4.2/cpp/src/Freeze/Makefile	2012-06-01 15:59:37.584371229 +0200
 @@ -72,7 +72,7 @@
  $(HDIR)/Catalog.h: Catalog.cpp
  Catalog.cpp: $(SDIR)/CatalogData.ice $(SLICE2FREEZE) $(SLICEPARSERLIB)
@@ -130,7 +130,7 @@ Index: Ice-3.4.2/cpp/src/Freeze/Makefile
 Index: Ice-3.4.2/cpp/src/IceStorm/FreezeDB/Makefile
 ===================================================================
 --- Ice-3.4.2.orig/cpp/src/IceStorm/FreezeDB/Makefile	2011-06-15 21:43:59.000000000 +0200
-+++ Ice-3.4.2/cpp/src/IceStorm/FreezeDB/Makefile	2012-03-19 22:07:19.295755478 +0100
++++ Ice-3.4.2/cpp/src/IceStorm/FreezeDB/Makefile	2012-06-01 15:59:37.584371229 +0200
 @@ -44,13 +44,13 @@
  HDIR		= $(headerdir)/IceStorm
  SDIR		= $(slicedir)/IceStorm
@@ -159,7 +159,7 @@ Index: Ice-3.4.2/cpp/src/IceStorm/FreezeDB/Makefile
 Index: Ice-3.4.2/cpp/src/IceGrid/FreezeDB/Makefile
 ===================================================================
 --- Ice-3.4.2.orig/cpp/src/IceGrid/FreezeDB/Makefile	2011-06-15 21:43:59.000000000 +0200
-+++ Ice-3.4.2/cpp/src/IceGrid/FreezeDB/Makefile	2012-03-19 22:07:19.295755478 +0100
++++ Ice-3.4.2/cpp/src/IceGrid/FreezeDB/Makefile	2012-06-01 15:59:37.588373229 +0200
 @@ -30,7 +30,7 @@
  HDIR		= $(headerdir)/IceGrid
  SDIR		= $(slicedir)/IceGrid
@@ -171,9 +171,9 @@ Index: Ice-3.4.2/cpp/src/IceGrid/FreezeDB/Makefile
  
 Index: Ice-3.4.2/py/config/Make.rules
 ===================================================================
---- Ice-3.4.2.orig/py/config/Make.rules	2012-03-19 22:07:18.651433506 +0100
-+++ Ice-3.4.2/py/config/Make.rules	2012-03-19 22:22:18.378274881 +0100
-@@ -41,14 +41,14 @@
+--- Ice-3.4.2.orig/py/config/Make.rules	2012-06-01 15:59:36.815987252 +0200
++++ Ice-3.4.2/py/config/Make.rules	2012-06-01 16:17:16.016405442 +0200
+@@ -41,17 +41,17 @@
  #
  # If multiple versions of Python are installed and you want a specific
  # version used for building the Ice extension, then set PYTHON_VERSION
@@ -182,16 +182,20 @@ Index: Ice-3.4.2/py/config/Make.rules
  # default Python interpreter found in your PATH.
  #
 -PYTHON_VERSION	    ?= python$(shell python -c "import sys; import distutils.sysconfig as ds; sys.stdout.write(ds.get_python_version())")
-+PYTHON_VERSION ?= python2.6
++PYTHON_VERSION ?= python2.7
  
 -PYTHON_INCLUDE_DIR  ?= $(shell $(PYTHON_VERSION) -c "import sys; import distutils.sysconfig as ds; sys.stdout.write(ds.get_python_inc())")
-+PYTHON_INCLUDE_DIR ?= /home/angstrom/setup-scripts/build/tmp-angstrom_2008_1/sysroots/armv7a-angstrom-linux-gnueabi/usr/include/python2.6
++PYTHON_INCLUDE_DIR ?= /home/build/setup-scripts/build/tmp-angstrom_v2012_05-eglibc/sysroots/beagleboard/usr/include/python2.7
  
 -PYTHON_LIB_DIR	    ?= $(shell $(PYTHON_VERSION) -c "import os; import sys; import distutils.sysconfig as ds; sys.stdout.write(os.path.join(ds.get_python_lib(plat_specific=1,standard_lib=1), 'config'))")
-+PYTHON_LIB_DIR ?= /usr/lib/python2.6
++PYTHON_LIB_DIR ?= /usr/lib/python2.7
  
  PYTHON_FLAGS	    ?= -I$(PYTHON_INCLUDE_DIR)
- PYTHON_LIBS	    ?= -L$(PYTHON_LIB_DIR) -l$(PYTHON_VERSION)
+-PYTHON_LIBS	    ?= -L$(PYTHON_LIB_DIR) -l$(PYTHON_VERSION)
++PYTHON_LIBS	    ?= -l$(PYTHON_VERSION)
+ 
+ #
+ # The build architectures for gcc based builds. The format of these
 @@ -80,9 +80,9 @@
  endif
  
@@ -201,7 +205,7 @@ Index: Ice-3.4.2/py/config/Make.rules
 -install_libdir		= $(install_pylibdir)
 +install_pythondir	= $(prefix)/lib/$(PYTHON_VERSION)
 +install_pylibdir	= $(install_pythondir)
-+install_libdir		= $(prefix)/lib
++install_libdir		= $(install_pythondir)
  
  #
  # Platform specific definitions
@@ -217,7 +221,7 @@ Index: Ice-3.4.2/py/config/Make.rules
 Index: Ice-3.4.2/py/python/Makefile
 ===================================================================
 --- Ice-3.4.2.orig/py/python/Makefile	2011-06-15 21:44:00.000000000 +0200
-+++ Ice-3.4.2/py/python/Makefile	2012-03-19 22:07:19.295755478 +0100
++++ Ice-3.4.2/py/python/Makefile	2012-06-01 15:59:37.588373229 +0200
 @@ -99,22 +99,22 @@
  SLICE2PYFLAGS	+= --ice
  
@@ -250,7 +254,7 @@ Index: Ice-3.4.2/py/python/Makefile
 Index: Ice-3.4.2/config/Make.common.rules
 ===================================================================
 --- Ice-3.4.2.orig/config/Make.common.rules	2011-06-15 21:43:58.000000000 +0200
-+++ Ice-3.4.2/config/Make.common.rules	2012-03-19 22:07:19.295755478 +0100
++++ Ice-3.4.2/config/Make.common.rules	2012-06-01 15:59:37.588373229 +0200
 @@ -56,22 +56,22 @@
      lp64binsuffix	= /pa20_64
  endif
@@ -309,7 +313,7 @@ Index: Ice-3.4.2/config/Make.common.rules
 Index: Ice-3.4.2/py/Makefile
 ===================================================================
 --- Ice-3.4.2.orig/py/Makefile	2011-06-15 21:44:00.000000000 +0200
-+++ Ice-3.4.2/py/Makefile	2012-03-19 22:07:19.295755478 +0100
++++ Ice-3.4.2/py/Makefile	2012-06-01 15:59:37.588373229 +0200
 @@ -17,7 +17,7 @@
  	@if test ! -d $(install_pythondir) ; \
  	then \

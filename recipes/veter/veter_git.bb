@@ -3,8 +3,6 @@ HOMEPAGE = "http://veter-project.blogspot.com/"
 LICENSE = "GPLv2"
 SECTION = "console"
 
-SRCREV = "${AUTOREV}"
-PV = "0.1+gitr${SRCPV}"
 PR = "r0"
 BB_GENERATE_MIRROR_TARBALLS = "0"
 CVS_TARBALL_STASH=""

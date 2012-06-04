@@ -1,26 +1,15 @@
-inherit image
+#inherit image
+require recipes-images/angstrom/systemd-image.bb
 
-DEPENDS = " task-base task-sdk-native gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly "
+DEPENDS =+ " task-base task-sdk-target gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly "
 
-ANGSTROM_EXTRA_INSTALL ?= ""
-
-# DISTRO_SSH_DAEMON ?= "openssh"
-DISTRO_SSH_DAEMON ?= "dropbear"
-
-IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
-
-IMAGE_INSTALL = "task-boot \
-            util-linux-ng-mount util-linux-ng-umount \
-            ${DISTRO_SSH_DAEMON} \
-            ${ANGSTROM_EXTRA_INSTALL} \
-            angstrom-version \
-           "
 IMAGE_LINGUAS = ""
 
 # Kernel related modules and staff
-IMAGE_INSTALL += " rt73-firmware kernel-module-rt73usb kernel-module-rt2x00lib kernel-module-rt2x00usb kernel-module-uvcvideo "
-IMAGE_INSTALL += " kernel-module-usbserial kernel-module-pl2303 kernel-module-pwc setpwc "
-IMAGE_INSTALL += " ti-codecs-omap3530-server ti-cmem-module ti-dsplink-module ti-lpm-module ti-sdma-module "
+# TO FIX !!! rt-73-firmware IMAGE_INSTALL += " rt73-firmware kernel-module-rt73usb kernel-module-rt2x00lib kernel-module-rt2x00usb kernel-module-uvcvideo "
+IMAGE_INSTALL += " kernel-module-rt2x00lib kernel-module-rt2x00usb kernel-module-uvcvideo "
+IMAGE_INSTALL += " kernel-module-usbserial kernel-module-pl2303 kernel-module-pwc "
+IMAGE_INSTALL += " ti-codecs-omap3530 ti-cmem-module ti-dsplink-module ti-lpm-module ti-sdma-module "
 
 # Kernel <= 2.6.35, easycapdc60 should be compiled separately, 9170 module is calles ar9170usb
 #IMAGE_INSTALL += " kernel-module-ar9170usb easycapdc60 "
@@ -29,8 +18,8 @@ IMAGE_INSTALL += " ti-codecs-omap3530-server ti-cmem-module ti-dsplink-module ti
 IMAGE_INSTALL += " kernel-module-ar9170usb kernel-module-easycap "
 
 # GStreamer related installs
-IMAGE_INSTALL += " gstreamer gst-plugins-base gst-plugins-base-apps gst-plugin-app gst-plugin-ffmpegcolorspace "
-IMAGE_INSTALL += " gst-plugin-video4linux2 gst-plugin-rtp gst-plugin-videomixer gst-plugin-videoscale gst-plugin-videobox "
+IMAGE_INSTALL += " gstreamer gst-plugins-base gst-plugins-base-apps gst-plugins-base-app gst-plugins-base-ffmpegcolorspace"
+IMAGE_INSTALL += " gst-plugins-good-video4linux2 gst-plugins-good-rtp gst-plugins-good-videomixer gst-plugins-base-videoscale gst-plugins-good-videobox "
 IMAGE_INSTALL += " gstreamer-ti "
 
 # Several usefull utilities
@@ -39,7 +28,7 @@ IMAGE_INSTALL += " gpsd gps-utils ntp xenomai "
 
 # Development environment
 # Basic dev tools
-IMAGE_INSTALL += " task-sdk-native git cmake kernel-headers ldd gdb "
+IMAGE_INSTALL += " task-sdk-target git cmake kernel-headers ldd gdb "
 # Gstreamer development environment
 IMAGE_INSTALL += " gstreamer-dev gst-plugins-base-dev libv4l-dev "
 # Misc library
@@ -49,10 +38,11 @@ IMAGE_INSTALL += " libgps curl-dev xenomai-dev "
 
 # Using the robot for labs
 # Python and company
-IMAGE_INSTALL += " python python-dev "
-IMAGE_INSTALL += " zeroc-ice zeroc-ice-dev zeroc-ice-slice python-zeroc-ice "
+IMAGE_INSTALL += " python python-dev python-datetime "
+IMAGE_INSTALL += " mcpp zeroc-ice zeroc-ice-dev zeroc-ice-slice python-zeroc-ice python-zeroc-ice-dev "
 
 IMAGE_PREPROCESS_COMMAND += "install -d ${IMAGE_ROOTFS}/root/.ssh;"
+IMAGE_PREPROCESS_COMMAND += "install -d ${IMAGE_ROOTFS}/lib/firmware;"
 # IMAGE_PREPROCESS_COMMAND += "install -c -m 600 ${FILE_DIRNAME}/files/authorized_keys ${IMAGE_ROOTFS}/root/.ssh/authorized_keys;"
 
 IMAGE_PREPROCESS_COMMAND += "install -c -m 644 ${FILE_DIRNAME}/files/interfaces ${IMAGE_ROOTFS}/etc/network/;"
@@ -60,7 +50,7 @@ IMAGE_PREPROCESS_COMMAND += "install -c -m 600 ${FILE_DIRNAME}/files/wpa_supplic
 IMAGE_PREPROCESS_COMMAND += "install -c -m 644 ${FILE_DIRNAME}/files/ar9170.fw ${IMAGE_ROOTFS}/lib/firmware/;"
 
 # Fix inittab for new kernel
-IMAGE_PREPROCESS_COMMAND += "sed -i 's/ttyS/ttyO/g' ${IMAGE_ROOTFS}/etc/inittab;"
+# IMAGE_PREPROCESS_COMMAND += "sed -i 's/ttyS/ttyO/g' ${IMAGE_ROOTFS}/etc/inittab;"
 
 RDEPENDS_kernel-base = ""
 
