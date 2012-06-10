@@ -1,0 +1,22 @@
+Index: linux-2.6.38.8/drivers/usb/musb/musb_core.c
+===================================================================
+--- linux-2.6.38.8.orig/drivers/usb/musb/musb_core.c	2011-06-03 03:35:11.000000000 +0200
++++ linux-2.6.38.8/drivers/usb/musb/musb_core.c	2012-06-10 16:14:59.129794962 +0200
+@@ -1949,7 +1949,7 @@
+ 		status = -ENODEV;
+ 		goto fail0;
+ 	}
+-
++/*
+ 	switch (plat->mode) {
+ 	case MUSB_HOST:
+ #ifdef CONFIG_USB_MUSB_HDRC_HCD
+@@ -1974,7 +1974,7 @@
+ 		status = -EINVAL;
+ 		goto fail0;
+ 	}
+-
++*/
+ 	/* allocate */
+ 	musb = allocate_instance(dev, plat->config, ctrl);
+ 	if (!musb) {

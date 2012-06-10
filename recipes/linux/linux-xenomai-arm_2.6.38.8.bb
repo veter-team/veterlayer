@@ -11,8 +11,11 @@ PV = "2.6.38.8"
 
 FILESPATHPKG_prepend = "linux-xenomai-2.6.38:"
 
+
 SRC_URI = "http://www.kernel.org/pub/linux/kernel/v2.6/linux-${PV}.tar.bz2;name=kernel \
 	   file://linux-xenomai-arm-2.6.38.8.patch \
+	   file://0001-8712u.patch \
+	   file://disable-musb-check.patch \
 	   file://defconfig"
 
 S = "${WORKDIR}/linux-${PV}"
