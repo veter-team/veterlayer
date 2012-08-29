@@ -1,0 +1,25 @@
+Index: xenomai-2.5.4/Makefile.am
+===================================================================
+--- xenomai-2.5.4.orig/Makefile.am	2010-08-11 17:26:40.760637569 +0200
++++ xenomai-2.5.4/Makefile.am	2010-08-11 17:26:59.100640516 +0200
+@@ -1,6 +1,6 @@
+ ACLOCAL_AMFLAGS=-I config
+ 
+-SUDO=sudo
++SUDO=/bin/true
+ 
+ SUBDIRS = src include config @XENO_MAYBE_DOCDIR@ scripts
+ 
+Index: xenomai-2.5.4/Makefile.in
+===================================================================
+--- xenomai-2.5.4.orig/Makefile.in	2010-08-11 17:27:08.256635407 +0200
++++ xenomai-2.5.4/Makefile.in	2010-08-11 17:27:24.824634981 +0200
+@@ -237,7 +237,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ ACLOCAL_AMFLAGS = -I config
+-SUDO = sudo
++SUDO = /bin/true
+ SUBDIRS = src include config @XENO_MAYBE_DOCDIR@ scripts
+ EXTRA_DIST = CREDITS README.INSTALL TROUBLESHOOTING ksrc examples debian
+ all: all-recursive

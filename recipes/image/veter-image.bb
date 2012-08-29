@@ -6,9 +6,11 @@ DEPENDS =+ " task-base task-sdk-target gst-plugins-base gst-plugins-good gst-plu
 IMAGE_LINGUAS = ""
 
 # Kernel related modules and staff
-IMAGE_INSTALL += " kernel-module-ar9170usb kernel-module-easycap kernel-module-8712u kernel-module-uvcvideo "
-IMAGE_INSTALL += " kernel-module-usbserial kernel-module-pl2303 "
-IMAGE_INSTALL += " ti-codecs-omap3530 ti-cmem-module ti-dsplink-module ti-lpm-module ti-sdma-module "
+#IMAGE_INSTALL += " kernel-module-ar9170usb kernel-module-easycap kernel-module-8712u kernel-module-uvcvideo "
+#IMAGE_INSTALL += " kernel-module-usbserial kernel-module-pl2303 kernel-module-cdc-acm "
+#IMAGE_INSTALL += " ti-codecs-omap3530 ti-cmem-module ti-dsplink-module ti-lpm-module ti-sdma-module "
+# Or install all compiled modules
+IMAGE_INSTALL += " kernel-modules "
 
 # GStreamer related installs
 IMAGE_INSTALL += " gstreamer gst-plugins-base gst-plugins-base-apps gst-plugins-base-app gst-plugins-base-ffmpegcolorspace"

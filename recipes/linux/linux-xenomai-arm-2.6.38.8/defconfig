@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux/arm 2.6.38.8 Kernel Configuration
-# Sun Jun 10 17:26:37 2012
+# Wed Jun 20 13:42:24 2012
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -1511,7 +1511,7 @@ CONFIG_USB_INVENTRA_DMA=y
 #
 # USB Device Class drivers
 #
-# CONFIG_USB_ACM is not set
+CONFIG_USB_ACM=m
 # CONFIG_USB_PRINTER is not set
 CONFIG_USB_WDM=y
 # CONFIG_USB_TMC is not set
